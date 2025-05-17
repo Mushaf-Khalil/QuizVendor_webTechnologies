@@ -1,0 +1,87 @@
+-- Create the database if it doesn't exist
+CREATE DATABASE IF NOT EXISTS quizz_app DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Switch to the quizz_app database
+USE quizz_app;
+
+-- Table: users
+-- Stores user information for login/signup (both creators and takers)
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL, -- Store hashed passwords
+    email VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- Table: quizzes
+-- Stores overall quiz information
+CREATE TABLE IF NOT EXISTS quizzes (
+    quiz_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    creator_user_id INT UNSIGNED NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (creator_user_id) REFERENCES users(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Table: questions
+-- Stores individual questions for each quiz
+CREATE TABLE IF NOT EXISTS questions (
+    question_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    quiz_id INT UNSIGNED NOT NULL,
+    question_text TEXT NOT NULL,
+    question_type ENUM('multiple_choice', 'short_answer', 'true_false') NOT NULL,
+    correct_short_answer TEXT DEFAULT NULL, -- For short answer questions
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(quiz_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Table: choices
+-- Stores answer options for multiple-choice and true_false questions
+CREATE TABLE IF NOT EXISTS choices (
+    choice_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    question_id INT UNSIGNED NOT NULL,
+    choice_text VARCHAR(255) NOT NULL,
+    is_correct BOOLEAN NOT NULL DEFAULT FALSE, -- Or TINYINT(1)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Table: quiz_attempts
+-- Stores each attempt a user makes on a quiz
+CREATE TABLE IF NOT EXISTS quiz_attempts (
+    attempt_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    quiz_id INT UNSIGNED NOT NULL,
+    taker_user_id INT UNSIGNED NOT NULL, -- User who took the quiz
+    attempt_datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    score DECIMAL(5, 2) DEFAULT NULL, -- e.g., 85.50 for 85.50%
+    total_questions_answered INT DEFAULT 0,
+    total_correct_answers INT DEFAULT 0,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(quiz_id) ON DELETE CASCADE,
+    FOREIGN KEY (taker_user_id) REFERENCES users(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Table: user_answers
+-- Stores the specific answer a user gave for each question in an attempt
+CREATE TABLE IF NOT EXISTS user_answers (
+    user_answer_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    attempt_id INT UNSIGNED NOT NULL,
+    question_id INT UNSIGNED NOT NULL,
+    selected_choice_id INT UNSIGNED DEFAULT NULL, -- For MCQs, references choices.choice_id
+    short_answer_text TEXT DEFAULT NULL,         -- For short answers
+    is_correct BOOLEAN DEFAULT NULL,             -- Filled during grading
+    FOREIGN KEY (attempt_id) REFERENCES quiz_attempts(attempt_id) ON DELETE CASCADE,
+    FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE,
+    FOREIGN KEY (selected_choice_id) REFERENCES choices(choice_id) ON DELETE SET NULL -- If a choice is deleted, set this to NULL
+) ENGINE=InnoDB;
+
+-- Optional: Add some indexes for performance on frequently queried columns
+ALTER TABLE quizzes ADD INDEX idx_creator_user_id (creator_user_id);
+ALTER TABLE questions ADD INDEX idx_quiz_id (quiz_id);
+ALTER TABLE choices ADD INDEX idx_question_id (question_id);
+ALTER TABLE quiz_attempts ADD INDEX idx_quiz_id_taker (quiz_id, taker_user_id);
+ALTER TABLE quiz_attempts ADD INDEX idx_taker_user_id (taker_user_id);
+ALTER TABLE user_answers ADD INDEX idx_attempt_id (attempt_id);
+ALTER TABLE user_answers ADD INDEX idx_question_id_answers (question_id);
+ALTER TABLE user_answers ADD INDEX idx_selected_choice_id (selected_choice_id);
