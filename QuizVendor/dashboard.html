@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard - QuizVendor</title>
+  <link rel="icon" href="ASSETS/cropped_image.png" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo-container { display: flex; align-items: center; }
+    .logo-img { height: 50px; margin-right: 10px; }
+    .site-title { font-size: 1.8rem; color: #333; margin: 0; }
+
+    nav { display: flex; align-items: center; gap: 1rem; }
+    /* Removed general nav a styling if only buttons are left, or keep for future links */
+    /* nav a { text-decoration: none; color: #333; font-weight: 500; padding: 8px 12px; border-radius: 4px; transition: color 0.3s, background-color 0.3s; }
+    nav a:hover { color: #007bff; background-color: #e9ecef;} */
+
+    main {
+      padding: 2rem;
+      flex: 1 0 auto;
+      text-align: center;
+    }
+    
+    .dashboard-header h2 {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        color: #343a40;
+    }
+    .dashboard-header p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 2rem;
+    }
+
+    .user-info-card {
+        background-color: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 500px;
+        margin: 0 auto 1rem auto; /* Reduced bottom margin */
+        text-align: left;
+    }
+    .user-info-card h3 {
+        margin-top: 0;
+        color: #007bff;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .user-info-card p {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+        color: #495057;
+    }
+    .user-info-card strong {
+        color: #343a40;
+    }
+
+    /* General Action Button Style */
+    .action-button {
+        padding: 10px 20px; /* Adjusted padding */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: background-color 0.3s, transform 0.2s;
+        border: none; 
+        cursor: pointer; 
+        display: inline-block; /* For<a>tags to behave like buttons */
+        text-align: center;
+    }
+    .action-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Specific Button Colors */
+    .action-button.primary { background-color: #007bff; }
+    .action-button.primary:hover { background-color: #0056b3; }
+    .action-button.secondary { background-color: #6c757d; }
+    .action-button.secondary:hover { background-color: #5a6268; }
+    .action-button.danger { background-color: #dc3545; }
+    .action-button.danger:hover { background-color: #c82333; }
+
+
+    /* Container for buttons below the card */
+    .page-actions-footer {
+        margin-top: 1.5rem; /* Space above this button group */
+        margin-bottom: 2rem; /* Space below this button group */
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    /* Actions in the main content area, if kept */
+    .dashboard-actions {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+
+    .site-footer {
+      flex-shrink: 0;
+      background-color: #fff;
+      padding: 1rem;
+      text-align: center;
+      border-top: 1px solid #e9ecef;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="logo-container">
+      <img src="ASSETS/QuizVendor..png" alt="QuizVendor Logo" class="logo-img" />
+      <h1 class="site-title">QuizVendor.</h1>
+    </div>
+    <nav>
+      <a href="takeQuiz.html" class="action-button primary">Take Quiz</a>
+      </nav>
+  </header>
+
+  <main>
+    <div class="dashboard-header">
+        <h2>Welcome, <span id="usernamePlaceholder">User</span>!</h2>
+        <p class="dashboard-info">Manage your quizzes and account details here.</p>
+    </div>
+
+    <div class="user-info-card">
+        <h3>Your Information</h3>
+        <p><strong>Full Name:</strong> <span id="userInfoName">Loading...</span></p>
+        <p><strong>User ID:</strong> <span id="userInfoId">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="userInfoEmail">Loading...</span></p>
+    </div>
+
+    <div class="page-actions-footer">
+        <a href="history.html" class="action-button secondary">Show History</a>
+        <button id="logoutBtn" class="action-button danger">Logout</button>
+    </div>
+
+    <!-- <div class="dashboard-actions">
+        <a href="create_quiz_page.html" class="action-button primary">Create a New Quiz</a>
+        </div> -->
+  </main>
+
+  <footer class="site-footer">
+    &copy; 2025 QuizVendor. All rights reserved.
+  </footer>
+
+  <script>
+    const logoutBtn = document.getElementById('logoutBtn');
+    const usernamePlaceholderEl = document.getElementById('usernamePlaceholder');
+    const userInfoNameEl = document.getElementById('userInfoName');
+    const userInfoIdEl = document.getElementById('userInfoId');
+    const userInfoEmailEl = document.getElementById('userInfoEmail');
+
+    // Logout functionality
+    
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            const res = await fetch('php/logout.php', { // Ensure path is correct
+                method: 'POST', // Or GET, if your logout.php doesn't check method
+                                // POST is slightly better as GET requests can be cached/prefetched
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const data = await res.json(); 
+
+            if (res.ok && data.success) {
+                alert(data.success); 
+                window.location.href = 'index.html'; // <<< REDIRECT TO INDEX.HTML HERE
+            } else {
+                alert(data.error || 'Logout failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            alert('Could not connect to server for logout.');
+        }
+    });
+}
+
+    // Check if user is logged in on page load
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const res = await fetch('php/checksession.php', { 
+                credentials: 'include' 
+            });
+
+            if (!res.ok) { 
+                let errorMsg = "Your session has expired or you are not logged in. Redirecting...";
+                if(res.status !== 401) { 
+                    try {
+                        const errData = await res.json();
+                        errorMsg = errData.error || errorMsg;
+                    } catch (e) { /* Ignore if error response is not JSON */ }
+                }
+                alert(errorMsg);
+                window.location.href = 'getstarted.html'; 
+                return; 
+            }
+            
+            const data = await res.json();
+
+            if (data.loggedIn) {
+                if (usernamePlaceholderEl) usernamePlaceholderEl.innerText = data.username || 'User';
+                if (userInfoNameEl) userInfoNameEl.innerText = data.username || 'N/A'; // data.username contains the full name
+                if (userInfoIdEl) userInfoIdEl.innerText = data.user_id || 'N/A';
+                if (userInfoEmailEl) userInfoEmailEl.innerText = data.email || 'N/A';
+            } else {
+                alert("You are not logged in. Redirecting to login.");
+                window.location.href = 'getstarted.html';
+            }
+
+        } catch (error) {
+            console.error('Error checking session:', error);
+            alert("Could not verify your session. Please try logging in again.");
+            // Consider redirecting if session check completely fails due to network/server issue
+            // window.location.href = 'getstarted.html'; 
+        }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>About Us - QuizVendor</title>
+    <link rel="icon" type="image/png" href="ASSETS/cropped_image.png" sizes="16x16">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 5%;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-logo-title {
+            display: flex;
+            align-items: center;
+        }
+
+        header img.logo-img { /* Added class for clarity */
+            width: 50px;
+            margin-right: 10px;
+        }
+
+        header h1.site-title { /* Added class for clarity */
+            font-size: 24px;
+            margin: 0;
+            color: #007BFF;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #007BFF;
+        }
+        
+        nav #dynamicAuthLink { /* Style for the dynamic login/dashboard link */
+            font-weight: 600;
+        }
+        nav #logoutLink { /* Style for the dynamic logout link */
+            font-weight: 600;
+            cursor: pointer; /* If handled by JS for POST */
+        }
+
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            flex-grow: 1;
+        }
+
+        .card {
+            background-color: white;
+            padding: 30px;
+            margin: 20px 0;
+            width: 90%;
+            max-width: 800px; /* Slightly wider for about page content */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card p {
+            line-height: 1.7; /* Improved readability */
+            color: #454545; /* Slightly adjusted text color */
+            text-align: justify;
+        }
+
+        .card h2, .card h3 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 1.5rem; /* Consistent margin */
+            color: #007BFF;
+        }
+        
+        /* Founders Section Styles (reused and adapted) */
+        .founders-section {
+            text-align: center;
+        }
+        .founders-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 25px; /* Increased gap slightly */
+            margin-top: 20px;
+        }
+        .founder-profile {
+            background-color: #f8f9fa;
+            border: 1px solid #e7e7e7; /* Slightly softer border */
+            border-radius: 10px; /* Softer radius */
+            padding: 25px;
+            width: calc(50% - 45px); /* Adjust width considering gap for 2-column on medium screens */
+            max-width: 320px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .founder-profile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .founder-profile img {
+            width: 130px; 
+            height: 130px;
+            border-radius: 50%; 
+            object-fit: cover; 
+            margin-bottom: 15px;
+            border: 4px solid #007BFF; /* Highlight color border */
+        }
+        .founder-profile h4 { 
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 1.25rem;
+        }
+        .founder-profile p.founder-role { /* Specific class for role/title */
+            font-size: 0.95rem;
+            color: #007bff; /* Role in accent color */
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .founder-profile p.founder-desc { /* Specific class for description */
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            font-size: 14px;
+            color: #666;
+            margin-top: auto; 
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 850px) { /* Adjust breakpoint for founder cards */
+            .founder-profile {
+                width: calc(50% - 35px); /* Still two per row but adjust gap */
+            }
+        }
+
+        @media (max-width: 680px) { /* Stack founder cards earlier */
+            .founder-profile {
+                width: 80%; 
+                max-width: 350px; /* Allow them to be a bit wider when stacked */
+                margin-left: auto;
+                margin-right: auto;
+            }
+             .founders-grid {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px 20px;
+            }
+            .header-logo-title {
+                margin-bottom: 10px;
+            }
+            nav {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            nav a {
+                margin: 8px 0;
+                display: block;
+                text-align: center;
+                padding: 10px;
+                width: 100%; /* Make nav links take more space */
+                box-sizing: border-box;
+            }
+             nav a:not(:last-child) {
+                 border-bottom: 1px solid #f0f0f0;
+             }
+
+            .card {
+                padding: 20px;
+                width: 100%; 
+                box-sizing: border-box;
+            }
+            .container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-logo-title">
+            <img src="ASSETS/QuizVendor..png" alt="QuizVendor Logo" class="logo-img">
+            <h1 class="site-title">QuizVendor.</h1>
+        </div>
+        <nav id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a> <a href="pricing.html">Pricing</a>
+            <a href="takeQuiz.html" id="navTakeQuizLink">Take Quiz</a>
+            <a href="getstarted.html" id="navAuthLink">Login/Signup</a>
+            </nav>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h2>About QuizVendor</h2>
+            <p style="text-align:center"> <strong>At QuizVendor</strong>, we believe that learning and assessment should be engaging, accessible, and efficient. Our journey began with a simple idea: to harness the power of Artificial Intelligence to revolutionize how quizzes are created and experienced. We are dedicated to providing an intuitive platform for educators to effortlessly generate diverse quizzes and for learners to dynamically test and enhance their knowledge across any subject.</p>
+            <p style="text-align: center;">Our AI-driven tools are designed to save educators valuable time while offering students personalized learning paths. We are committed to continuous innovation, aiming to make QuizVendor the go-to resource for interactive learning and intelligent assessment worldwide.</p>
+        </div>
+
+        <section class="card founders-section">
+            <h2>Meet The Team</h2>
+            <div class="founders-grid">
+                <div class="founder-profile">
+                    <img src="ASSETS/f1.jpg" alt="Founder A">
+                    <h4>Mushaf Khalil</h4>
+                    <p class="founder-role">Founder</p>
+                    <p class="founder-desc">Driving the vision with a passion for educational technology.</p>
+                </div>
+                <div class="founder-profile">
+                    <img src="ASSETS/f2.jpg" alt="Founder B">
+                    <h4>Taskeen Abbas</h4>
+                    <p class="founder-role">Co-Founder</p>
+                    <p class="founder-desc">Contibuting with his outstanding skills.</p>
+                </div>
+                <div class="founder-profile">
+                    <img src="ASSETS/f3.jpg" alt="Founder C">
+                    <h4>Usman Tahir</h4>
+                    <p class="founder-role">Co-Founder</p>
+                    <p class="founder-desc">Leading product development with a user-centric approach.</p>
+                </div>
+                <div class="founder-profile">
+                    <img src="ASSETS/f4.jpg" alt="Founder D">
+                    <h4>Hassaan Ahmed</h4>
+                    <p class="founder-role">Graphic Designer & Manager </p>
+                    <p class="founder-desc">empowering the community with his exception work of art.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © 2025 QuizVendor. All rights reserved.
+    </footer>
+
+<script>
+    let isUserLoggedInAbout = false; // Specific flag for this page
+
+    async function checkLoginStatusForAboutPage() {
+        try {
+            const response = await fetch('php/check_session.php', { credentials: 'include' });
+            const mainNav = document.getElementById('mainNav');
+            const authLink = document.getElementById('navAuthLink'); // The Login/Signup link
+            
+            if (!mainNav || !authLink) return; // Guard clause
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.loggedIn && data.username) {
+                    isUserLoggedInAbout = true;
+                    // Update "Login/Signup" to "Username (Dashboard)"
+                    authLink.textContent = `${data.username} (Dashboard)`;
+                    authLink.href = 'dashboard.html';
+
+                    // Add Logout link/button
+                    let logoutLink = document.getElementById('navLogoutLink');
+                    if (!logoutLink) {
+                        logoutLink = document.createElement('a');
+                        logoutLink.id = 'navLogoutLink';
+                        logoutLink.textContent = 'Logout';
+                        logoutLink.href = '#'; // Prevent navigation, handle with JS
+                        logoutLink.style.cursor = 'pointer';
+                        logoutLink.addEventListener('click', async (e) => {
+                            e.preventDefault();
+                            try {
+                                const logoutRes = await fetch('php/logout.php', { method: 'POST' });
+                                const logoutData = await logoutRes.json();
+                                if (logoutRes.ok && logoutData.success) {
+                                    alert(logoutData.success);
+                                    window.location.href = 'index.html'; // Redirect to home/login page
+                                } else {
+                                    alert(logoutData.error || 'Logout failed.');
+                                }
+                            } catch (err) {
+                                console.error('Logout fetch error:', err);
+                                alert('Error during logout.');
+                            }
+                        });
+                        mainNav.appendChild(logoutLink);
+                    }
+                } else {
+                    isUserLoggedInAbout = false;
+                    authLink.textContent = 'Login/Signup';
+                    authLink.href = 'getstarted.html';
+                    let logoutLink = document.getElementById('navLogoutLink');
+                    if (logoutLink) logoutLink.remove();
+                }
+            } else {
+                 isUserLoggedInAbout = false; // Treat non-ok response as not logged in
+                 authLink.textContent = 'Login/Signup';
+                 authLink.href = 'getstarted.html';
+                 let logoutLink = document.getElementById('navLogoutLink');
+                 if (logoutLink) logoutLink.remove();
+            }
+        } catch (error) {
+            console.warn('Error checking session on About page:', error);
+            isUserLoggedInAbout = false; 
+            // Ensure default auth link if error occurs
+            const authLink = document.getElementById('navAuthLink');
+            if (authLink) {
+                authLink.textContent = 'Login/Signup';
+                authLink.href = 'getstarted.html';
+            }
+            let logoutLink = document.getElementById('navLogoutLink');
+            if (logoutLink) logoutLink.remove();
+        }
+    }
+
+    function handleTakeQuizClickAbout(event) {
+        if (!isUserLoggedInAbout) {
+            event.preventDefault(); 
+            alert("Please log in or sign up to take a quiz!");
+            window.location.href = 'getstarted.html'; 
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        checkLoginStatusForAboutPage(); 
+
+        const takeQuizLink = document.getElementById('navTakeQuizLink');
+        if (takeQuizLink) {
+            takeQuizLink.addEventListener('click', handleTakeQuizClickAbout);
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback - QuizVendor</title>
+  <link rel="icon" type="image/png" href="ASSETS/cropped_image.png" sizes="16x16" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 5%;
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+      width: 50px;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin: 0;
+      color: #007BFF;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      margin: 0 15px;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #007BFF;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 20px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 30px;
+      width: 90%;
+      max-width: 700px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #007BFF;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 15px;
+      align-self: flex-start;
+    }
+
+    input, textarea {
+      padding: 10px;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 5px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 30px;
+      border-radius: 8px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      font-size: 14px;
+      color: #666;
+      margin-top: 40px;
+      border-top: 1px solid #ccc;
+    }
+
+    @media (max-width: 600px) {
+      header, nav {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      nav a {
+        margin: 10px 0;
+        display: block;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      input, textarea {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center;">
+      <img src="ASSETS/QuizVendor..png" alt="brand_Logo" />
+      <h1>QuizVendor.</h1>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="takeQuiz.html">Take Quiz</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Share Your Feedback</h2>
+      <p>Your feedback helps us improve QuizVendor. Let us know your thoughts!</p>
+    </div>
+
+    <div class="card">
+      <form>
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" placeholder="Mushaf Khalil" />
+
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" placeholder="xyzabc@gmail.com" />
+
+        <label for="message">Your Feedback:</label>
+        <textarea id="message" placeholder="Write your thoughts..." rows="5"></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 AI Quiz Generator. All rights reserved.
+  </footer>
+
+</body>
+</html>

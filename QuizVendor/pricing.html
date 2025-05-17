@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pricing - Quiz Vendor</title>
+  <link rel="icon" href="ASSETS/cropped_image.png" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header div {
+      display: flex;
+      align-items: center;
+    }
+
+    header img {
+      margin-right: 12px;
+    }
+
+    header h2 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #007bff;
+      letter-spacing: 1.2px;
+    }
+
+    nav a {
+      margin: 0 12px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #007bff;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #0056b3;
+    }
+
+    .get-started-btn {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      font-weight: 700;
+      box-shadow: 0 3px 8px rgba(0,123,255,0.4);
+      transition: background 0.3s ease;
+    }
+
+    .get-started-btn:hover {
+      background: #f3f5f7;
+      box-shadow: 0 4px 12px rgba(0,86,179,0.6);
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 32px;
+      color: #333;
+    }
+
+    table {
+      width: 90%;
+      max-width: 1000px;
+      margin: 30px auto;
+      border-collapse: collapse;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: white;
+    }
+
+    th {
+      background-color: #19508b;
+      color: white;
+      padding: 20px;
+      font-size: 20px;
+    }
+
+    td {
+      padding: 18px;
+      text-align: center;
+      font-size: 16px;
+      border-top: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .free-btn {
+      background-color: #76bd86;
+    }
+
+    .basic-btn {
+      background-color: #d0bb7b;
+    }
+
+    .premium-btn {
+      background-color: #cb8289;
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px 0;
+      text-align: center;
+      border-top: 1px solid #ccc;
+      font-size: 0.9rem;
+      color: #666;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      header h2 {
+        font-size: 1.4rem;
+      }
+
+      nav a, .get-started-btn {
+        font-size: 0.9rem;
+        margin: 0 8px;
+      }
+
+      table, th, td {
+        font-size: 14px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header and Navigation -->
+  <header>
+    <div>
+      <img src="ASSETS/QuizVendor..png" alt="QuizVendor Logo" width="50" />
+      <h2>QuizVendor.</h2>
+    </div>
+    <nav>
+      <a href="about.html">About</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="feedback.html">Feedback</a>
+      <a href="takeQuiz.html">Take Quiz</a>
+      <a href="getstarted.html" class="get-started-btn">Get Started</a>
+    </nav>
+  </header>
+
+  <!-- Pricing Section -->
+  <h2>Choose the Best Plan for You</h2>
+  <table>
+    <tr>
+      <th>Free Plan</th>
+      <th>Basic Plan</th>
+      <th>Premium Plan</th>
+    </tr>
+    <tr>
+      <td>$0 / month</td>
+      <td>$9.99 / month</td>
+      <td>$19.99 / month</td>
+    </tr>
+    <tr>
+      <td>$0 / year</td>
+      <td>$99.99 / year</td>
+      <td>$199.99 / year</td>
+    </tr>
+    <tr>
+      <td>✔️ 10 quizzes/month</td>
+      <td>✔️ 100 quizzes/month</td>
+      <td>✔️ Unlimited quizzes</td>
+    </tr>
+    <tr>
+      <td>✔️ Basic leaderboard</td>
+      <td>✔️ Advanced leaderboard</td>
+      <td>✔️ Full leaderboard access</td>
+    </tr>
+    <tr>
+      <td>❌ No custom quizzes</td>
+      <td>✔️ Custom quizzes</td>
+      <td>✔️ Custom branding</td>
+    </tr>
+    <tr>
+      <td>❌ No priority support</td>
+      <td>❌ No premium support</td>
+      <td>✔️ Priority support</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="takeQuiz.html">
+          <button class="free-btn">Get Started</button>
+        </a>
+      </td>
+      <td>
+        <button class="basic-btn">Subscribe</button>
+      </td>
+      <td>
+        <button class="premium-btn">Go Premium</button>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 AI Quiz Generator. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

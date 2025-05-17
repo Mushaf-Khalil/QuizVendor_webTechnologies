@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz App - Create & Take</title>
+  <link rel="icon" type="image/png" href="ASSETS/cropped_image.png" sizes="64x64" />
+
+  <style>
+    body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(to right, #eef2f3, #8e9eab); color: #333; }
+    .site-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .logo-container { display: flex; align-items: center; }
+    .logo-img { height: 50px; margin-right: 10px; }
+    .site-title { font-size: 1.8rem; color: #333; margin: 0; }
+    .main-nav a { margin: 0 10px; text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; }
+    .main-nav a:hover { color: #007bff; }
+    .divider { border: 0; height: 1px; background: #e0e0e0; margin: 1rem 0; }
+
+    .container { max-width: 800px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .container h2 { text-align: center; margin-bottom: 1.5rem; color: #007bff; }
+    .form-section label { margin-top: 1rem; display: block; font-weight: bold; color: #555; }
+    .form-section input[type="text"], .form-section select, .form-section textarea {
+        padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; width: 100%; box-sizing: border-box; font-size: 1rem;
+    }
+    .form-section textarea { min-height: 80px; }
+    .action-button {
+        margin-top: 1.5rem; padding: 12px 20px; background-color: #007bff; color: white;
+        border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; display: block; width: auto; font-size: 1rem;
+    }
+    .action-button:hover { background-color: #0056b3; }
+    .action-button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+    #loader { text-align: center; margin-top: 20px; }
+    #loader p { font-style: italic; color: #555; }
+    .spinner { border: 4px solid rgba(0,0,0,0.1); width: 36px; height: 36px; border-radius: 50%; border-left-color: #007bff; animation: spin 1s ease infinite; margin: 10px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    #quizDisplayArea { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+    #quizResultsArea { margin-top: 20px; padding-top: 20px; } /* Removed border-top here, will be on elements within */
+    .quiz-display-title { font-size: 1.5em; margin-bottom: 20px; text-align: center; color: #333; }
+    .question-block { margin-bottom: 25px; padding: 15px; background-color: #f9f9f9; border: 1px solid #e7e7e7; border-radius: 5px; }
+    .question-block p.question-text { font-weight: bold; margin-bottom: 10px; font-size: 1.1em; }
+    .choices-list { list-style: none; padding-left: 0; }
+    .choices-list li { margin-bottom: 8px; padding: 5px; border-radius: 3px; transition: background-color 0.2s;}
+    .choices-list li:hover { background-color: #e9ecef; }
+    .choices-list label { font-weight: normal; margin-left: 8px; cursor: pointer; display: block; }
+    .short-answer-input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
+    
+    #messageArea { text-align: center; margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 5px; display: none; }
+    #messageArea.success { color: white; background-color: #28a745; }
+    #messageArea.error { color: white; background-color: #dc3545; }
+
+    /* Quiz Results Area Specific Styles */
+    #quizResultsArea h3 { text-align: center; color: #007bff; margin-bottom: 1.5rem; }
+    #quizResultsArea #overallScoreText { font-size: 1.2em; text-align: center; margin-top: 0.5rem; margin-bottom: 2rem; color: #333;}
+    
+    .progress-bar-container {
+        width: 90%; /* Or 100% if you prefer */
+        background-color: #e9ecef;
+        border-radius: 8px;
+        margin: 0 auto 1rem auto; /* Centered */
+        height: 28px; 
+        overflow: hidden;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .progress-bar-fill {
+        height: 100%;
+        width: 0%; /* Initial width */
+        background-color: #28a745; /* Green for success/progress */
+        text-align: center; 
+        line-height: 28px; /* Match container height */
+        color: white;
+        font-weight: bold;
+        font-size: 0.9em;
+        transition: width 0.6s ease-in-out;
+        border-radius: 8px 0 0 8px; /* Rounded only on the fill side initially */
+    }
+    .progress-bar-fill.full { /* When 100% */
+        border-radius: 8px;
+    }
+
+
+    .result-question { margin-bottom: 15px; padding: 10px; border: 1px solid #eee; background-color: #fff; border-radius: 4px; }
+    .result-question:last-child { border-bottom: none; } /* Not needed if using border on each block */
+    .result-question .user-answer { font-style: italic; color: #555; }
+    .result-question .correct-answer-text { color: #198754; font-weight: 500;} /* Darker green */
+    .result-status.correct { color: #198754; font-weight: bold; }
+    .result-status.incorrect { color: #dc3545; font-weight: bold; }
+
+    .site-footer { text-align: center; padding: 1rem; background-color: #f8f9fa; margin-top: 2rem; border-top: 1px solid #e0e0e0;}
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="logo-container">
+      <img src="ASSETS/QuizVendor..png" alt="brand_Logo" class="logo-img">
+      <h1 class="site-title">QuizVendor.</h1>
+    </div>
+    <nav class="main-nav">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="history.html" class="see-history-link">See History</a>
+      <a href="php/logout.php">Logout</a> 
+    </nav>
+  </header>
+  <div class="divider"></div>
+
+  <main class="container">
+    <div id="userGreeting" style="text-align: center; margin-bottom: 1rem; font-size: 1.2em;"></div>
+
+    <section id="quizCreationSection" class="form-section">
+      <h2>Create Your Quiz</h2>
+      <form id="createQuizForm">
+        <label for="quizTopic">Quiz Topic</label>
+        <input type="text" id="quizTopic" name="quizTopic" placeholder="e.g., JavaScript Basics " required>
+
+        <label for="quizDescription">Quiz Description (Optional)</label>
+        <textarea id="quizDescription" name="quizDescription" placeholder="A brief description of your quiz"></textarea>
+
+        <label for="questionType">Dominant Question Type:</label>
+        <select id="questionType" name="questionType" required>
+          <option value="multiple_choice">Multiple Choice</option>
+          <option value="short_answer">Short Answer</option>
+          <option value="true_false">True/False</option>
+          <option value="mix">Mix of Types</option>
+        </select>
+
+        <label for="difficulty">Difficulty Level:</label>
+        <select id="difficulty" name="difficulty" required>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+
+        <label for="numQuestions">Number of Questions:</label>
+        <select id="numQuestions" name="numQuestions" required>
+          <option value="3">3 Questions</option>
+          <option value="5">5 Questions</option>
+          <option value="10">10 Questions</option>
+        </select>
+        <button type="submit" class="action-button" id="generateQuizBtn" disabled>Generate Quiz</button>
+      </form>
+    </section>
+
+    <div id="loader" style="display: none;">
+      <p>Working on it...</p> <div class="spinner"></div>
+    </div>
+    
+    <div id="messageArea"></div>
+
+    <section id="quizTakingSection" style="display: none;">
+      <h2 id="quizDisplayTitle" class="quiz-display-title">Take Your Quiz</h2>
+      <form id="takeQuizForm">
+         <div id="quizDisplayArea">
+            </div>
+         <button type="submit" class="action-button" id="submitQuizBtn" disabled>Submit Answers</button>
+      </form>
+    </section>
+
+    <section id="quizResultsArea" style="display: none;">
+        <h3>Quiz Results</h3>
+        <div class="progress-bar-container">
+            <div id="scoreProgressBar" class="progress-bar-fill">0%</div>
+        </div>
+        <p id="overallScoreText"></p> <div id="detailedResults" style="margin-top: 1.5rem;"></div> <button id="createNewQuizBtn" class="action-button" style="margin-top:20px;">Create Another Quiz</button>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="divider"></div>
+    <p>© 2025 AI Quiz Generator. All rights reserved.</p>
+  </footer>
+
+<script>
+// --- Global Variables ---
+let currentQuizData = null; 
+let loggedInUserId = null;
+let loggedInUsername = null;
+
+// --- DOM Elements ---
+const createQuizFormEl = document.getElementById('createQuizForm');
+const generateQuizBtnEl = document.getElementById('generateQuizBtn');
+const loaderEl = document.getElementById('loader');
+const messageAreaEl = document.getElementById('messageArea');
+const userGreetingEl = document.getElementById('userGreeting');
+
+const quizCreationSectionEl = document.getElementById('quizCreationSection');
+const quizTakingSectionEl = document.getElementById('quizTakingSection');
+const quizDisplayTitleEl = document.getElementById('quizDisplayTitle');
+const quizDisplayAreaEl = document.getElementById('quizDisplayArea');
+const takeQuizFormEl = document.getElementById('takeQuizForm');
+const submitQuizBtnEl = document.getElementById('submitQuizBtn');
+
+const quizResultsAreaEl = document.getElementById('quizResultsArea');
+const scoreProgressBarFillEl = document.getElementById('scoreProgressBar'); // New
+const overallScoreTextPEl = document.getElementById('overallScoreText');    // Changed ID
+const detailedResultsDivEl = document.getElementById('detailedResults');
+const createNewQuizBtnEl = document.getElementById('createNewQuizBtn');
+
+// --- Event Listeners ---
+window.addEventListener('DOMContentLoaded', verifyUserSession); 
+if (createQuizFormEl) createQuizFormEl.addEventListener('submit', handleQuizCreation);
+if (takeQuizFormEl) takeQuizFormEl.addEventListener('submit', handleQuizSubmission);
+if (createNewQuizBtnEl) createNewQuizBtnEl.addEventListener('click', resetToCreateQuizView);
+
+// --- UI Helper Functions ---
+function showLoader(show) {
+    loaderEl.style.display = show ? 'block' : 'none';
+}
+
+function showMessage(message, type = 'error', duration = 5000) {
+    messageAreaEl.textContent = message;
+    messageAreaEl.className = ''; 
+    messageAreaEl.classList.add(type); 
+    messageAreaEl.style.display = 'block';
+    if (duration > 0) {
+        setTimeout(() => { messageAreaEl.style.display = 'none'; }, duration);
+    }
+}
+
+function resetToCreateQuizView() {
+    quizResultsAreaEl.style.display = 'none';
+    quizTakingSectionEl.style.display = 'none';
+    quizCreationSectionEl.style.display = 'block';
+    messageAreaEl.style.display = 'none';
+    currentQuizData = null;
+    if(createQuizFormEl) createQuizFormEl.reset(); 
+    quizDisplayAreaEl.innerHTML = ''; 
+    if (loggedInUserId && generateQuizBtnEl) {
+        generateQuizBtnEl.disabled = false;
+    } else if (generateQuizBtnEl) {
+        generateQuizBtnEl.disabled = true;
+    }
+    if (submitQuizBtnEl) submitQuizBtnEl.disabled = true;
+}
+
+// --- Session Verification Function ---
+async function verifyUserSession() {
+    showLoader(true);
+    if (generateQuizBtnEl) generateQuizBtnEl.disabled = true;
+    if (submitQuizBtnEl) submitQuizBtnEl.disabled = true;
+
+    try {
+        const res = await fetch('php/checksession.php', { credentials: 'include' });
+        if (!res.ok) {
+            let errorMsg = "Your session has expired or you are not logged in. Redirecting to login page...";
+            if (res.status !== 401) { 
+                try { 
+                    const errData = await res.json();
+                    errorMsg = errData.error || errorMsg;
+                } catch (e) { /* Ignore if error response is not JSON */ }
+            }
+            showMessage(errorMsg, 'error', 0); 
+            setTimeout(() => { window.location.href = 'getstarted.html'; }, 3000);
+            return; 
+        }
+
+        const data = await res.json();
+        if (data.loggedIn && data.user_id) {
+            loggedInUserId = data.user_id;
+            loggedInUsername = data.username;
+            if (userGreetingEl) userGreetingEl.innerHTML = `Hello, <strong>${loggedInUsername}</strong>! Ready to create or take a quiz?`;
+            // showMessage(`Welcome back, ${loggedInUsername}!`, 'success'); // Can be a bit much on every load
+            if (generateQuizBtnEl) generateQuizBtnEl.disabled = false; 
+        } else {
+            showMessage("Authentication failed. Redirecting to login page...", 'error', 0);
+            setTimeout(() => { window.location.href = 'getstarted.html'; }, 3000);
+        }
+    } catch (error) {
+        console.error('Error verifying session:', error);
+        showMessage("Could not verify your session. Please try logging in. Redirecting...", 'error', 0);
+        setTimeout(() => { window.location.href = 'getstarted.html'; }, 3000);
+    } finally {
+        showLoader(false);
+    }
+}
+
+// --- Core Functions ---
+function handleQuizCreation(e) {
+    e.preventDefault();
+    if (!loggedInUserId) {
+        showMessage("You must be logged in to create a quiz. Please login first.", 'error');
+        return;
+    }
+    showLoader(true);
+    generateQuizBtnEl.disabled = true;
+    messageAreaEl.style.display = 'none';
+
+    const topic = document.getElementById('quizTopic').value.trim();
+    const description = document.getElementById('quizDescription').value.trim();
+    const questionType = document.getElementById('questionType').value;
+    const difficulty = document.getElementById('difficulty').value;
+    const numQuestions = document.getElementById('numQuestions').value;
+
+    const quizTitle = `${topic} Quiz (${difficulty}, ${numQuestions}q)`;
+    let quizPromptDetails = `Topic: ${topic}. Difficulty: ${difficulty}. Number of questions: ${numQuestions}.`;
+    if (questionType === "mix") quizPromptDetails += ` Include a mix of multiple_choice, short_answer, and true_false questions.`;
+    else if (questionType === "true_false") quizPromptDetails += ` Only generate true_false questions.`;
+    else quizPromptDetails += ` Primarily generate ${questionType.replace('_', ' ')} questions.`;
+
+    const formData = new FormData();
+    formData.append('creator_user_id', loggedInUserId);
+    formData.append('quiz_title', quizTitle);
+    if (description) formData.append('quiz_description', description);
+    formData.append('quiz_prompt', quizPromptDetails);
+
+    fetch('php/create_quiz.php', { method: 'POST', body: formData })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.error || `Server Error: ${response.status}`); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success && data.quiz_data) {
+            showMessage('Quiz created! You can now take it below.', 'success');
+            currentQuizData = data.quiz_data; 
+            displayQuizForTaking(data.quiz_data);
+            quizCreationSectionEl.style.display = 'none';
+            quizTakingSectionEl.style.display = 'block';
+            if (submitQuizBtnEl) submitQuizBtnEl.disabled = false; 
+        } else {
+            throw new Error(data.error || 'Failed to create quiz. Invalid data received.');
+        }
+    })
+    .catch(error => {
+        console.error('Quiz Creation Error:', error);
+        showMessage('Error creating quiz: ' + error.message, 'error');
+    })
+    .finally(() => {
+        showLoader(false);
+        if (loggedInUserId) generateQuizBtnEl.disabled = false;
+    });
+}
+
+function displayQuizForTaking(quizData) {
+    quizDisplayTitleEl.textContent = quizData.title || 'Your Quiz';
+    quizDisplayAreaEl.innerHTML = ''; 
+
+    quizData.questions.forEach((question, index) => {
+        const questionBlock = document.createElement('div');
+        questionBlock.className = 'question-block';
+        questionBlock.dataset.questionId = question.question_id; 
+
+        const questionTextElem = document.createElement('p');
+        questionTextElem.className = 'question-text';
+        questionTextElem.innerHTML = `<strong>Q${index + 1}:</strong> ${question.question_text}`;
+        questionBlock.appendChild(questionTextElem);
+
+        const inputName = `question_${question.question_id}`;
+
+        if ((question.question_type === 'multiple_choice' || question.question_type === 'true_false') && question.choices && question.choices.length > 0) {
+            const choicesList = document.createElement('ul');
+            choicesList.className = 'choices-list';
+            question.choices.forEach((choice) => {
+                const listItem = document.createElement('li');
+                const radioInput = document.createElement('input');
+                radioInput.type = 'radio';
+                radioInput.name = inputName;
+                radioInput.value = choice.choice_id; 
+                radioInput.id = `q${question.question_id}_choice${choice.choice_id}`;
+                radioInput.required = true;
+
+                const choiceLabel = document.createElement('label');
+                choiceLabel.htmlFor = radioInput.id;
+                choiceLabel.textContent = choice.choice_text;
+
+                listItem.appendChild(radioInput);
+                listItem.appendChild(choiceLabel);
+                choicesList.appendChild(listItem);
+            });
+            questionBlock.appendChild(choicesList);
+        } else if (question.question_type === 'short_answer') {
+            const answerInput = document.createElement('textarea');
+            answerInput.className = 'short-answer-input';
+            answerInput.name = inputName; 
+            answerInput.rows = 3;
+            answerInput.placeholder = 'Type your answer here...';
+            answerInput.required = true;
+            questionBlock.appendChild(answerInput);
+        }
+        quizDisplayAreaEl.appendChild(questionBlock);
+    });
+}
+
+function handleQuizSubmission(e) {
+    e.preventDefault();
+    if (!loggedInUserId) { 
+        showMessage("You must be logged in to submit a quiz. Please login first.", 'error');
+        return;
+    }
+    if (!currentQuizData || !currentQuizData.quiz_id) {
+        showMessage('No quiz data available to submit. Please generate a quiz first.', 'error');
+        return;
+    }
+    showLoader(true);
+    submitQuizBtnEl.disabled = true;
+    messageAreaEl.style.display = 'none';
+
+    const userAnswers = [];
+    const questionBlocks = quizDisplayAreaEl.querySelectorAll('.question-block');
+
+    questionBlocks.forEach(block => {
+        const questionId = block.dataset.questionId;
+        const question = currentQuizData.questions.find(q => q.question_id == questionId); 
+        if (!question) return;
+        let answerData = { question_id: parseInt(questionId) }; 
+        if (question.question_type === 'multiple_choice' || question.question_type === 'true_false') {
+            const selectedRadio = block.querySelector(`input[name="question_${questionId}"]:checked`);
+            if (selectedRadio) {
+                answerData.selected_choice_id = parseInt(selectedRadio.value);
+            } else {
+                answerData.selected_choice_id = null; 
+            }
+        } else if (question.question_type === 'short_answer') {
+            const textarea = block.querySelector(`textarea[name="question_${questionId}"]`);
+            answerData.short_answer_text = textarea ? textarea.value.trim() : "";
+        }
+        userAnswers.push(answerData);
+    });
+
+    const submissionData = {
+        quiz_id: currentQuizData.quiz_id,
+        taker_user_id: loggedInUserId,
+        answers: userAnswers
+    };
+    
+    fetch('php/submit_quiz.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.error || `Server Error: ${response.status}`); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success && data.results) {
+            showMessage('Quiz submitted and graded!', 'success');
+            displayResults(data.results); // Call the updated displayResults
+            quizTakingSectionEl.style.display = 'none';
+            quizResultsAreaEl.style.display = 'block';
+        } else {
+            throw new Error(data.error || 'Failed to submit or grade quiz.');
+        }
+    })
+    .catch(error => {
+        console.error('Quiz Submission Error:', error);
+        showMessage('Error submitting quiz: ' + error.message, 'error');
+    })
+    .finally(() => {
+        showLoader(false);
+        if (loggedInUserId) submitQuizBtnEl.disabled = false;
+    });
+}
+
+function displayResults(resultsData) {
+    // Update Progress Bar
+    if (scoreProgressBarFillEl) {
+        const percentage = parseFloat(resultsData.score_percentage).toFixed(2);
+        scoreProgressBarFillEl.style.width = `${percentage}%`;
+        scoreProgressBarFillEl.textContent = `${percentage}%`;
+        if (percentage == 100) {
+            scoreProgressBarFillEl.classList.add('full');
+        } else {
+            scoreProgressBarFillEl.classList.remove('full');
+        }
+    }
+
+    // Update Score Text
+    if (overallScoreTextPEl) {
+        overallScoreTextPEl.innerHTML = `You answered <strong>${resultsData.total_correct_answers}</strong> out of <strong>${resultsData.total_questions_answered}</strong> questions correctly.`;
+    }
+    
+    detailedResultsDivEl.innerHTML = ''; 
+    resultsData.graded_answers.forEach((gradedAnswer, index) => {
+        const questionInfo = currentQuizData.questions.find(q => q.question_id == gradedAnswer.question_id);
+        if (!questionInfo) return;
+
+        const resultBlock = document.createElement('div');
+        resultBlock.className = 'result-question';
+
+        let resultHTML = `<p class="question-text"><strong>Q${index + 1}:</strong> ${questionInfo.question_text}</p>`;
+        resultHTML += `<p class="user-answer">Your answer: `;
+
+        if (questionInfo.question_type === 'multiple_choice' || questionInfo.question_type === 'true_false') {
+            const userAnswerChoiceId = gradedAnswer.user_answer ? gradedAnswer.user_answer.selected_choice_id : null;
+            // Find choice text from currentQuizData as it contains choice_text (not sent back from submit_quiz.php for user_answer)
+            const choiceMadeByUser = questionInfo.choices.find(c => c.choice_id == userAnswerChoiceId);
+            resultHTML += choiceMadeByUser ? `<em>${choiceMadeByUser.choice_text}</em>` : '<em>Not answered</em>';
+        } else if (questionInfo.question_type === 'short_answer') {
+            resultHTML += `<em>${gradedAnswer.user_answer.short_answer_text || "Not answered"}</em>`;
+        }
+        resultHTML += `</p>`;
+
+        if (gradedAnswer.is_correct) {
+            resultHTML += `<p class="result-status correct">Result: Correct!</p>`;
+        } else {
+            resultHTML += `<p class="result-status incorrect">Result: Incorrect.</p>`;
+            if (gradedAnswer.correct_answer_display) {
+                 resultHTML += `<p class="correct-answer-text">Correct Answer: ${gradedAnswer.correct_answer_display}</p>`;
+            }
+        }
+        resultBlock.innerHTML = resultHTML;
+        detailedResultsDivEl.appendChild(resultBlock);
+    });
+}
+
+</script>
+</body>
+</html>

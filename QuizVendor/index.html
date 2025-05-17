@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Vendor - Home</title>
+  <link rel="icon" href="ASSETS/cropped_image.png" />
+  <script defer src="script.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     background: linear-gradient(to right, #f8f9fa, #e3f2fd);
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header div {
+      display: flex;
+      align-items: center;
+    }
+
+    header img {
+      margin-right: 12px;
+    }
+
+    header h2 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #007bff;
+      letter-spacing: 1.2px;
+    }
+
+    nav a {
+      margin: 0 12px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #007bff;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #0056b3;
+    }
+
+    .get-started-btn {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      font-weight: 700;
+      box-shadow: 0 3px 8px rgba(0,123,255,0.4);
+      transition: background 0.3s ease;
+    }
+
+    .get-started-btn:hover {
+      background: #f3f5f7;
+      box-shadow: 0 4px 12px rgba(0,86,179,0.6);
+    }
+
+    main {
+      flex: 1;
+      padding: 40px 5%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-box {
+      background-color: #ffffffdd;
+      padding: 40px 30px;
+      border-radius: 18px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+      margin: 40px 0;
+      text-align: center;
+      color: #222;
+    }
+
+    .section-box h1 {
+      font-size: 2.4rem;
+      margin-bottom: 15px;
+      color: #007bff;
+    }
+
+    .section-box p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+      color: #444;
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px 0;
+      text-align: center;
+      border-top: 1px solid #ccc;
+      font-size: 0.9rem;
+      color: #666;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 600px) {
+      header h2 {
+        font-size: 1.4rem;
+      }
+
+      nav a, .get-started-btn {
+        font-size: 0.9rem;
+        margin: 0 8px;
+      }
+
+      main {
+        padding: 20px 3%;
+      }
+
+      .section-box {
+        padding: 30px 20px;
+        margin: 25px 0;
+      }
+
+      .section-box h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header and Navigation -->
+  <header>
+    <div>
+      <img src="ASSETS/QuizVendor..png" alt="QuizVendor Logo" width="50" />
+      <h2>QuizVendor.</h2>
+    </div>
+    <nav>
+      <a href="about.html">About Us</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="feedback.html">Feedback</a>
+      
+      <a href="getstarted.html" class="get-started-btn">Get Started</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <div class="section-box">
+      <h1>Personalized Quizzes in Seconds.</h1>
+      <h1>Powered by AI.</h1>
+      <p><b>QuizVendor is your AI partner for creating effortless quizzes, with the choice of your level of difficulty so you can focus on what you need to.</b></p>
+    </div>
+
+    <!-- How it Works Section -->
+    <div class="section-box">
+      <h1>How it Works?</h1>
+      <p><b>1. Choose the topic of your quiz or paste your content.</b></p>
+      <p><b>2. Select the difficulty level.</b></p>
+      <p><b>3. Click on Generate Quiz.</b></p>
+      <p><b>4. Your quiz is ready to be taken.</b></p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 AI Quiz Generator. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
