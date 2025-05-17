@@ -30,7 +30,7 @@ if (!$creator_user_id || empty($quiz_title) || empty($quiz_prompt_from_user)) {
 
 // IMPORTANT: Store your API key securely (e.g., environment variable, config file outside web root)
 // DO NOT hardcode it directly in production code if possible.
-$openai_api_key = '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'; // Replace with your actual key
+$openai_api_key = 'YOUR API KEY'; // Replace with your actual key
 
 // --- OpenAI API Call ---
 $prompt_instruction = "You are a quiz generator. Based on the user request: '$quiz_prompt_from_user', generate a quiz.";
